@@ -1,0 +1,459 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap');
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --g1:#1a3d1f;--g2:#2d6a35;--g3:#4caf50;--gl:#e8f5e9;--gp:#f1f8f2;
+    --gold:#c8a84b;--goldl:#f5edd6;--cream:#faf8f3;--dark:#1a1a1a;
+    --text:#2c2c2c;--muted:#6b7280;--white:#fff;
+  }
+  body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);overflow-x:hidden}
+
+  nav{
+    position:sticky;top:0;z-index:100;
+    background:rgba(26,61,31,0.97);
+    display:flex;align-items:center;justify-content:space-between;
+    padding:0 2rem;height:64px;
+    border-bottom:1px solid rgba(255,255,255,0.1);
+  }
+  .nav-logo{display:flex;align-items:center;gap:10px;cursor:pointer}
+  .nav-logo img{width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid rgba(255,255,255,0.3)}
+  .nav-brand{font-family:'Playfair Display',serif;color:var(--gold);font-size:1.1rem;font-weight:700}
+  .nav-links{display:flex;gap:2rem;list-style:none}
+  .nav-links a{color:rgba(255,255,255,0.85);text-decoration:none;font-size:0.88rem;cursor:pointer;transition:color 0.2s}
+  .nav-links a:hover{color:var(--gold)}
+  .nav-cta{background:var(--gold);color:var(--g1);border:none;padding:8px 20px;border-radius:20px;font-family:'DM Sans',sans-serif;font-size:0.85rem;font-weight:500;cursor:pointer}
+  .nav-cta:hover{opacity:0.9}
+
+  .hero{position:relative;overflow:hidden;background:var(--g1)}
+  .hero-slider{position:relative;height:90vh;min-height:500px}
+  .slide{position:absolute;inset:0;opacity:0;transition:opacity 0.8s ease}
+  .slide.active{opacity:1}
+  .slide img{width:100%;height:100%;object-fit:cover;object-position:center top}
+  .slide-overlay{position:absolute;inset:0;background:linear-gradient(to right,rgba(26,61,31,0.82) 0%,rgba(26,61,31,0.4) 55%,transparent 100%)}
+  .slide-content{
+    position:absolute;top:50%;left:6%;transform:translateY(-50%);
+    max-width:520px;z-index:2;
+  }
+  .hero-badge{
+    display:inline-block;background:rgba(200,168,75,0.25);
+    border:1px solid rgba(200,168,75,0.5);color:var(--gold);
+    font-size:0.72rem;font-weight:500;padding:5px 14px;border-radius:20px;
+    margin-bottom:1.2rem;letter-spacing:1px;text-transform:uppercase;
+  }
+  .slide-content h1{
+    font-family:'Playfair Display',serif;
+    font-size:clamp(2rem,4vw,3.2rem);color:var(--white);line-height:1.15;margin-bottom:1rem;
+  }
+  .slide-content h1 span{color:var(--gold)}
+  .slide-content p{color:rgba(255,255,255,0.8);font-size:1rem;line-height:1.7;margin-bottom:1.8rem}
+  .hero-btns{display:flex;gap:1rem;flex-wrap:wrap}
+  .btn-primary{background:var(--gold);color:var(--g1);border:none;padding:13px 26px;border-radius:28px;font-family:'DM Sans',sans-serif;font-weight:500;font-size:0.9rem;cursor:pointer}
+  .btn-primary:hover{opacity:0.9}
+  .btn-outline{background:transparent;color:var(--white);border:1.5px solid rgba(255,255,255,0.5);padding:13px 26px;border-radius:28px;font-family:'DM Sans',sans-serif;font-size:0.9rem;cursor:pointer}
+  .btn-outline:hover{border-color:var(--white)}
+  .slider-dots{position:absolute;bottom:24px;left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:10}
+  .dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.4);cursor:pointer;transition:all 0.3s}
+  .dot.active{background:var(--gold);width:24px;border-radius:4px}
+  .slider-arrow{
+    position:absolute;top:50%;transform:translateY(-50%);
+    background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);
+    color:var(--white);width:40px;height:40px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:10;
+    font-size:18px;transition:background 0.2s;
+  }
+  .slider-arrow:hover{background:rgba(255,255,255,0.3)}
+  .arrow-left{left:20px}
+  .arrow-right{right:20px}
+
+  .stats-bar{background:var(--white);border-bottom:1px solid #e8e8e8;padding:1.4rem 2rem;display:flex;justify-content:center;gap:4rem;flex-wrap:wrap}
+  .stat-item{text-align:center}
+  .stat-num{font-family:'Playfair Display',serif;font-size:1.7rem;font-weight:700;color:var(--g1);display:block}
+  .stat-label{font-size:0.78rem;color:var(--muted);margin-top:2px}
+
+  section{padding:4.5rem 2rem}
+  .container{max-width:1100px;margin:0 auto}
+  .section-tag{display:inline-block;background:var(--gl);color:var(--g2);font-size:0.72rem;font-weight:500;padding:5px 14px;border-radius:20px;margin-bottom:1rem;letter-spacing:0.8px;text-transform:uppercase}
+  .section-title{font-family:'Playfair Display',serif;font-size:clamp(1.7rem,3vw,2.4rem);color:var(--g1);line-height:1.2;margin-bottom:1rem}
+  .section-sub{color:var(--muted);font-size:0.95rem;line-height:1.75;max-width:540px}
+
+  .about-section{background:var(--cream)}
+  .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center}
+  .about-visual{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+  .nc{background:var(--white);border:1px solid #e8ede9;border-radius:14px;padding:1.2rem;text-align:center}
+  .nc.feat{background:var(--g1);grid-column:span 2}
+  .nc h4{font-size:1.3rem;font-weight:700;color:var(--g1)}
+  .nc.feat h4{color:var(--gold);font-size:1.7rem}
+  .nc p{font-size:0.75rem;color:var(--muted);margin-top:2px}
+  .nc.feat p{color:rgba(255,255,255,0.65)}
+  .nc-icon{font-size:24px;margin-bottom:0.4rem;display:block}
+  .benefits-list{list-style:none;margin-top:1.5rem}
+  .benefits-list li{display:flex;align-items:flex-start;gap:10px;padding:0.55rem 0;border-bottom:1px solid #f0f0f0;font-size:0.9rem}
+  .benefits-list li:last-child{border-bottom:none}
+  .check{color:var(--g2);font-weight:700;flex-shrink:0}
+
+  .products-section{background:var(--gp)}
+  .prod-layout{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center;margin-top:3rem}
+  .prod-image-wrap{position:relative}
+  .prod-image-wrap img{width:100%;border-radius:20px;display:block}
+  .prod-badge{position:absolute;top:16px;left:16px;background:var(--g1);color:var(--white);font-size:0.72rem;padding:5px 12px;border-radius:10px;font-weight:500}
+  .prod-badge-gold{position:absolute;top:16px;right:16px;background:var(--gold);color:var(--g1);font-size:0.72rem;padding:5px 12px;border-radius:10px;font-weight:500}
+  .prod-detail h3{font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--g1);margin-bottom:0.5rem}
+  .prod-detail p{color:var(--muted);font-size:0.9rem;line-height:1.7;margin-bottom:1.5rem}
+  .pack-options{display:grid;grid-template-columns:repeat(3,1fr);gap:0.75rem;margin-bottom:1.5rem}
+  .pack{border:1.5px solid #d0e0d2;border-radius:12px;padding:0.75rem;text-align:center;cursor:pointer;transition:all 0.2s;background:var(--white)}
+  .pack:hover,.pack.selected{border-color:var(--g2);background:var(--gl)}
+  .pack .w{font-weight:500;font-size:0.9rem;color:var(--g1)}
+  .pack .p{font-size:1.1rem;font-weight:700;color:var(--g2);margin-top:2px}
+  .pack .val{font-size:0.7rem;color:var(--muted);margin-top:2px}
+  .btn-buy{background:var(--g1);color:var(--white);border:none;padding:13px 28px;border-radius:28px;font-family:'DM Sans',sans-serif;font-weight:500;font-size:0.9rem;cursor:pointer;width:100%}
+  .btn-buy:hover{background:var(--g2)}
+  .prod-trust{display:flex;gap:1rem;margin-top:1rem;flex-wrap:wrap}
+  .trust-chip{background:var(--gl);color:var(--g2);font-size:0.72rem;padding:5px 12px;border-radius:10px;font-weight:500}
+
+  .buy-section{background:var(--white)}
+  .buy-header{text-align:center;margin-bottom:3rem}
+  .buy-header .section-sub{margin:0 auto}
+  .buy-channels{display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-bottom:2.5rem}
+  .channel-card{border:1.5px solid #e0e8e1;border-radius:18px;padding:2.5rem;text-align:center;cursor:pointer;background:var(--white);transition:all 0.3s}
+  .channel-card:hover{transform:translateY(-3px)}
+  .channel-icon-wrap{width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1.2rem;font-size:30px}
+  .wa .channel-icon-wrap{background:#e8f5e9}
+  .ig .channel-icon-wrap{background:#fce4ec}
+  .channel-card h3{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--g1);margin-bottom:0.5rem}
+  .channel-card p{color:var(--muted);font-size:0.88rem;line-height:1.6;margin-bottom:1.5rem}
+  .btn-wa{background:#25d366;color:var(--white);border:none;padding:11px 22px;border-radius:22px;font-family:'DM Sans',sans-serif;font-weight:500;font-size:0.88rem;cursor:pointer}
+  .btn-ig{background:#e4405f;color:var(--white);border:none;padding:11px 22px;border-radius:22px;font-family:'DM Sans',sans-serif;font-weight:500;font-size:0.88rem;cursor:pointer}
+  .steps-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem}
+  .step-item{text-align:center;padding:1.5rem 0.75rem}
+  .step-num{width:38px;height:38px;border-radius:50%;background:var(--g1);color:var(--white);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.95rem;margin:0 auto 0.7rem}
+  .step-item h4{font-size:0.88rem;font-weight:500;color:var(--g1);margin-bottom:0.3rem}
+  .step-item p{font-size:0.78rem;color:var(--muted)}
+
+  .reviews-section{background:var(--g1);padding:4.5rem 2rem}
+  .reviews-section .section-title{color:var(--white)}
+  .reviews-section .section-tag{background:rgba(200,168,75,0.2);color:var(--gold)}
+  .reviews-header{text-align:center;margin-bottom:3rem}
+  .reviews-header .section-sub{color:rgba(255,255,255,0.6);margin:0 auto}
+  .reviews-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.5rem}
+  .rev-card{background:rgba(255,255,255,0.09);border:1px solid rgba(255,255,255,0.15);border-radius:16px;padding:1.6rem}
+  .stars{color:var(--gold);font-size:0.9rem;letter-spacing:2px;margin-bottom:0.9rem}
+  .rev-text{color:rgba(255,255,255,0.82);font-size:0.88rem;line-height:1.75;margin-bottom:1.4rem;font-style:italic}
+  .reviewer{display:flex;align-items:center;gap:10px}
+  .rev-av{width:38px;height:38px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.8rem;color:var(--g1);flex-shrink:0}
+  .rev-name{font-weight:500;font-size:0.88rem;color:var(--white)}
+  .rev-loc{font-size:0.72rem;color:rgba(255,255,255,0.45)}
+
+  footer{background:var(--dark);color:rgba(255,255,255,0.65);padding:3rem 2rem 2rem}
+  .footer-grid{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;margin-bottom:2.5rem}
+  .footer-brand .nav-brand{display:block;margin-bottom:0.75rem;font-family:'Playfair Display',serif;color:var(--gold);font-size:1.1rem}
+  .footer-brand p{font-size:0.82rem;line-height:1.7;color:rgba(255,255,255,0.45)}
+  footer h4{color:var(--white);font-size:0.88rem;font-weight:500;margin-bottom:1rem}
+  footer ul{list-style:none}
+  footer ul li{margin-bottom:0.45rem}
+  footer ul a{color:rgba(255,255,255,0.45);text-decoration:none;font-size:0.82rem;cursor:pointer;transition:color 0.2s}
+  footer ul a:hover{color:var(--gold)}
+  .footer-bottom{max-width:1100px;margin:0 auto;border-top:1px solid rgba(255,255,255,0.1);padding-top:1.4rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}
+  .footer-bottom p{font-size:0.78rem;color:rgba(255,255,255,0.3)}
+  .footer-logo-img{width:36px;height:36px;border-radius:50%;object-fit:cover;opacity:0.6}
+
+  .fade-in{opacity:0;transform:translateY(18px);transition:all 0.55s ease}
+  .fade-in.visible{opacity:1;transform:none}
+
+  @media(max-width:768px){
+    .about-grid,.prod-layout,.buy-channels,.footer-grid{grid-template-columns:1fr}
+    .steps-row{grid-template-columns:repeat(2,1fr)}
+    .nav-links{display:none}
+    .hero-slider{height:70vh}
+    .slide-content{left:5%;right:5%;max-width:none}
+    .stat-num{font-size:1.4rem}
+    .stats-bar{gap:1.5rem}
+  }
+</style>
+
+<nav>
+  <div class="nav-logo" onclick="goTo('home')">
+    <img src="C:\Users\samruddha\Downloads\Real log.ico" alt="Naren Organics logo">
+    <span class="nav-brand">Naren Organics </span>
+  </div>
+  <ul class="nav-links">
+    <li><a onclick="goTo('home')">Home</a></li>
+    <li><a onclick="goTo('products')">Products</a></li>
+    <li><a onclick="goTo('buy')">Contact Us</a></li>
+    <li><a onclick="goTo('reviews')">Reviews</a></li>
+  </ul>
+  <button class="nav-cta" onclick="goTo('buy')">Order Now</button>
+</nav>
+
+<section class="hero" id="home">
+  <div class="hero-slider" id="heroSlider">
+    <div class="slide active">
+      <div class="slide-overlay"></div>
+      <div class="slide-content">
+        <div class="hero-badge">100% Organic &amp; Natural</div>
+        <h1>Fuel Your<br><span>Focus.</span></h1>
+        <p>Sustained energy for peak performance. Pure Moringa — nature's most powerful superfood.</p>
+        <div class="hero-btns">
+          <button class="btn-primary" onclick="goTo('products')">View Our Product</button>
+        
+        </div>
+      </div>
+    </div>
+    <div class="slide">
+      <div class="slide-overlay"></div>
+      <div class="slide-content">
+        <div class="hero-badge">The Miracle Tree of India</div>
+        <h1>Start Your Morning<br><span>Right.</span></h1>
+        <p>One teaspoon of Moringa — 90+ nutrients, 49 antioxidants, 18 amino acids. Every single day.</p>
+        <div class="hero-btns">
+          <button class="btn-primary" onclick="goTo('products')">Shop Now</button>
+          <button class="btn-outline" onclick="goTo('buy')">Order via WhatsApp</button>
+        </div>
+      </div>
+    </div>
+    <div class="slide">
+      <div class="slide-overlay"></div>
+      <div class="slide-content">
+        <div class="hero-badge">Superfoods Your Way</div>
+        <h1>The World's Most<br><span>Powerful Plant.</span></h1>
+        <p>Cold-processed to preserve every nutrient. Grown in Maharashtra, delivered to your door.</p>
+        <div class="hero-btns">
+          <button class="btn-primary" onclick="goTo('products')">View Products</button>
+          <button class="btn-outline" onclick="goTo('reviews')">See Reviews</button>
+        </div>
+      </div>
+    </div>
+    <button class="slider-arrow arrow-left" onclick="moveSlide(-1)">&#8592;</button>
+    <button class="slider-arrow arrow-right" onclick="moveSlide(1)">&#8594;</button>
+    <div class="slider-dots" id="sliderDots">
+      <div class="dot active" onclick="goSlide(0)"></div>
+      <div class="dot" onclick="goSlide(1)"></div>
+      <div class="dot" onclick="goSlide(2)"></div>
+    </div>
+  </div>
+</section>
+
+<div class="stats-bar">
+  <div class="stat-item"><span class="stat-num">90+</span><span class="stat-label">Nutrients per serving</span></div>
+  <div class="stat-item"><span class="stat-num">49</span><span class="stat-label">Antioxidants</span></div>
+  <div class="stat-item"><span class="stat-num">32</span><span class="stat-label">Anti-inflammatory compounds</span></div>
+  <div class="stat-item"><span class="stat-num">18</span><span class="stat-label">Amino acids</span></div>
+</div>
+
+<section class="about-section" id="about">
+  <div class="container">
+    <div class="about-grid">
+      <div class="fade-in">
+        <div class="section-tag">About Moringa</div>
+        <h2 class="section-title">Superfoods Your Way — Pure &amp; Potent</h2>
+        <p class="section-sub">Moringa oleifera, the "Miracle Tree", has been used for centuries in Ayurvedic medicine. Our powder is cold-dried from fresh tender leaves to lock in maximum nutrition.</p>
+        <ul class="benefits-list">
+          <li><span class="check">&#10003;</span> Boosts immunity &amp; fights inflammation</li>
+          <li><span class="check">&#10003;</span> Rich in iron — great for anaemia</li>
+          <li><span class="check">&#10003;</span> Supports healthy blood sugar levels</li>
+          <li><span class="check">&#10003;</span> Improves skin, hair &amp; energy levels</li>
+          <li><span class="check">&#10003;</span> Complete plant-based protein source</li>
+          <li><span class="check">&#10003;</span> No additives, fillers or preservatives</li>
+        </ul>
+      </div>
+      <div class="about-visual fade-in">
+        <div class="nc feat">
+          <h4>92+</h4>
+          <p>Nutrients in every spoonful of Moringa</p>
+        </div>
+        <div class="nc"><h4 style="color:var(--g1)">Protein</h4><p>All 9 essential amino acids</p></div>
+        <div class="nc"><h4 style="color:var(--g1)">Antioxidants</h4><p>Fights free radicals daily</p></div>
+        <div class="nc"><h4 style="color:var(--g1)">Iron</h4><p>3x more than spinach</p></div>
+        <div class="nc"><h4 style="color:var(--g1)">Calcium</h4><p>4x more than milk</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="products-section" id="products">
+  <div class="container">
+    <div class="fade-in">
+      <div class="section-tag">Our Products</div>
+      <h2 class="section-title">Choose Your Pack</h2>
+      <p class="section-sub">Freshly processed in small batches — maximum quality, maximum potency.</p>
+    </div>
+    <div class="prod-layout fade-in">
+      <div class="prod-image-wrap">
+        <img src="C:\Users\samruddha\Downloads\logo.jpeg" alt="Naren Organics Moringa Powder 200g pack">
+        <div class="prod-badge">FSSAI Certified</div>
+        <div class="prod-badge-gold">Best Seller</div>
+      </div>
+      <div class="prod-detail">
+        <h3>Moringa Leaf Powder</h3>
+        <p>Nutritional Superfood — 90+ Nutrients, 49 Antioxidants, 32 Anti-inflammatory compounds, 18 Amino acids, Multivitamins &amp; Minerals. 100% natural, pure, effective &amp; safe.</p>
+        <div class="pack-options">
+          <div class="pack selected" onclick="selectPack(this,'100g','&#8377;199')">
+            <div class="w">100g</div>
+            <div class="p">&#8377;149</div>
+            <div class="val">Starter</div>
+          </div>
+          <div class="pack" onclick="selectPack(this,'200g','&#8377;349')">
+            <div class="w">200g</div>
+            <div class="p">&#8377;299</div>
+            <div class="val">Best value</div>
+          </div>
+          
+        </div>
+        <button class="btn-buy" onclick="goTo('buy')">Now via WhatsApps</button>
+        <div class="prod-trust">
+          <span class="trust-chip">100% Organic</span>
+          <span class="trust-chip">No Preservatives</span>
+          <span class="trust-chip">Lab Tested</span>
+          <span class="trust-chip">Pan India Delivery</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="buy-section" id="buy">
+  <div class="container">
+    <div class="buy-header fade-in">
+      <div class="section-tag">How to Buy</div>
+      <h2 class="section-title">Order in 2 Simple Steps</h2>
+      <p class="section-sub">Connect with us directly through WhatsApp or Instagram to place your order and get it delivered to your doorstep.</p>
+    </div>
+    <div class="buy-channels fade-in">
+      <div class="channel-card wa">
+        <div class="channel-icon-wrap">&#128172;</div>
+        <h3>Order via WhatsApp</h3>
+        <p>Chat with us directly for quick order placement, queries, and real-time delivery updates. Fastest way to order!</p>
+        <a href="https://wa.me/9960792723" target="_blank" style="text-decoration: none;">
+  <button class="btn-wa">WhatsApp Us Now</button>
+</a>
+        
+      </div>
+      <div class="channel-card ig">
+        <div class="channel-icon-wrap">&#128247;</div>
+        <h3>Follow on Instagram</h3>
+        <p>DM us on Instagram, explore recipes, usage tips, and customer stories. We reply fast — usually within an hour!</p>
+        <a href="https://www.instagram.com/narenorganics/?hl=en" target="_blank" style="text-decoration: none;">
+          <button class="btn-ig">Visit our Handle</button>
+        </a>
+      </div>
+    </div>
+    <div class="steps-row fade-in">
+      <div class="step-item">
+        <div class="step-num">1</div>
+        <h4>Choose your pack</h4>
+        <p>100g or 200g</p>
+      </div>
+      <div class="step-item">
+        <div class="step-num">2</div>
+        <h4>Message us</h4>
+        <p>WhatsApp or Instagram DM</p>
+      </div>
+      <div class="step-item">
+        <div class="step-num">3</div>
+        <h4>Confirm &amp; Pay</h4>
+        <p>UPI / Bank transfer / COD</p>
+      </div>
+      <div class="step-item">
+        <div class="step-num">4</div>
+        <h4>Get Delivered</h4>
+        <p>Pan India, 3–5 working days</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="reviews-section" id="reviews">
+  <div class="container">
+    <div class="reviews-header fade-in">
+      <div class="section-tag">Customer Reviews</div>
+      <h2 class="section-title">What Our Customers Say</h2>
+      <p class="section-sub">Real stories from people who have made Naren Organics Moringa a part of their daily wellness routine.</p>
+    </div>
+    <div class="reviews-grid">
+      <div class="rev-card fade-in">
+        <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p class="rev-text">"I've been taking this moringa powder for 2 months. My iron levels improved significantly and I feel so much more energetic throughout the day. Totally worth it!"</p>
+        <div class="reviewer"><div class="rev-av">PR</div><div><div class="rev-name">Priya Rao</div><div class="rev-loc">Pune, Maharashtra</div></div></div>
+      </div>
+      <div class="rev-card fade-in">
+        <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p class="rev-text">"The powder is very fine and blends smoothly in milk and smoothies. No bitter taste, very natural smell. My whole family uses it now. Excellent packaging too!"</p>
+        <div class="reviewer"><div class="rev-av">AK</div><div><div class="rev-name">Anjali Kaur</div><div class="rev-loc">Mumbai, Maharashtra</div></div></div>
+      </div>
+      <div class="rev-card fade-in">
+        <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
+        <p class="rev-text">"Ordered the 200g pack. Great quality at a reasonable price. Ordered via WhatsApp — very easy process and got delivery in 3 days. Will definitely reorder!"</p>
+        <div class="reviewer"><div class="rev-av">RS</div><div><div class="rev-name">Rahul Sharma</div><div class="rev-loc">Nagpur, Maharashtra</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <span class="nav-brand">Naren Organics</span>
+      <p>Bringing the ancient power of Moringa to modern wellness. Pure, natural, and grown with love in Maharashtra, India.</p>
+    </div>
+    <div>
+      <h4>Shop</h4>
+      <ul>
+        <li><a>Moringa 100g</a></li>
+        <li><a>Moringa 200g</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Learn</h4>
+      <ul>
+        <li><a>About Us</a></li>
+        <li><a>Blog</a></li>
+        <li><a>FAQ</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Contact Us</h4>
+      <ul>
+        <li><a>+91 9960792723</a></li>
+        <li><a>@narenorganics</a></li>
+        <li><a>narenorganics.info@gmail.com</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&#169; 2026 Naren Organics. All rights reserved. FSSAI Lic. No. 21526330000241</p>
+    <img class="footer-logo-img" src="C:\Users\samruddha\Downloads\Real log.ico" alt="Naren Organics">
+  </div>
+</footer>
+
+<script>
+  let cur = 0;
+  const slides = document.querySelectorAll('.slide');
+  const dots = document.querySelectorAll('.dot');
+
+  function goSlide(n) {
+    slides[cur].classList.remove('active');
+    dots[cur].classList.remove('active');
+    cur = (n + slides.length) % slides.length;
+    slides[cur].classList.add('active');
+    dots[cur].classList.add('active');
+  }
+
+  function moveSlide(d) { goSlide(cur + d); }
+
+  setInterval(() => moveSlide(1), 5000);
+
+  function goTo(id) {
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function selectPack(el, w, p) {
+    document.querySelectorAll('.pack').forEach(x => x.classList.remove('selected'));
+    el.classList.add('selected');
+  }
+
+  const obs = new IntersectionObserver(es => {
+    es.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
+</script>
